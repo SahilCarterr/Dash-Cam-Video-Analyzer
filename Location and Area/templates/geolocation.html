@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>HTML Geolocation</h1>
+<body onload="getLocation()">
+
+<p id="demo"></p>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+  <script>
+    const x = document.getElementById("demo");
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+      }
+    }
+
+    function showPosition(position) {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      x.innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
+
+      // Send coordinates to the server using AJAX
+      $.ajax({
+        type: "POST",
+        url: "/process_location",
+        data: { latitude: latitude, longitude: longitude },
+        success: function(response) {
+          console.log("Server response:", response);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
